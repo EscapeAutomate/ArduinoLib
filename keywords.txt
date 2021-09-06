@@ -1,0 +1,5 @@
+Puzzle	KEYWORD1
+EscapeAutomate	KEYWORD1
+Loop	KEYWORD2
+RegisterPuzzle	KEYWORD2
+Setup	KEYWORD2

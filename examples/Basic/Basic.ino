@@ -1,4 +1,3 @@
-#include <Adafruit_MCP23X17.h>
 #include "EscapeAutomate2.hpp"
 
 
@@ -18,8 +17,6 @@ public:
 	StringProperty* testString;
 	ListProperty*	testList;
 
-	Adafruit_MCP23X17 mcp;
-
 	void Setup()
 	{
 		testBool = new BoolProperty(1, "testBool");
@@ -31,15 +28,6 @@ public:
 		RegisterProperty(testInt);
 		RegisterProperty(testString);
 		RegisterProperty(testList);
-
-		// uncomment appropriate mcp.begin
-		if (!mcp.begin_I2C(0x21)) {
-			//if (!mcp.begin_SPI(CS_PIN)) {
-			Serial.println("Error.");
-			while (1);
-		}
-
-		mcp.pinMode(0, OUTPUT);
 	}
 
 	void Start()
@@ -71,11 +59,12 @@ public:
 		switch (propertyId)
 		{
 		case 1: // testBool
-			mcp.digitalWrite(0, testBool->Value);
 			break;
 		case 2: // testNumber
 			break;
 		case 3: // testString
+			break;
+		case 4: // testList
 			break;
 		}
 	}
@@ -84,14 +73,12 @@ ExamplePuzzleClass ExamplePuzzle(0, "ExamplePuzzle");
 
 
 void setup() {
-	Wire.begin(6, 7);
 	Serial.begin(115200);
 	delay(500);
 
 	EscapeAutomate.RegisterPuzzle(&ExamplePuzzle);
 
-	EscapeAutomate.Setup("9FEB3BB60F834F708E79D7FA6C78EFC3", "Basic example", "Echappatoire", "eX66rFfj5qAFymxa", "VFTEQjfa3anBUEs6zQAI");
-	//EscapeAutomate.Setup("9FEB3BB60F834F708E79D7FA6C78EFC3", "Basic example", "OrneTHD-6996", "4A780423489CBB91", "aYz4qBVfwlb4JKPT4CYi");
+	EscapeAutomate.Setup("projectId", "Basic example", "wifiSsid", "wifiPassword", "masterPassword");
 }
 
 void loop() {

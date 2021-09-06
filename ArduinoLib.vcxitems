@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{95bc7b95-dc48-4474-886c-6a899c5e9703}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="$(MSBuildThisFileDirectory)library.properties" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\EscapeAutomate2.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Objects\BaseProperty.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Objects\BoolProperty.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Objects\HubProperty.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Objects\ListProperty .cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Objects\NumberProperty.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Objects\PuzzleProperty.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Objects\StringProperty.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Puzzle.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\defines.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Enums.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\EscapeAutomate2.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\EscLogs.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Objects\BoolProperty.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Objects\HubProperty.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Objects\BaseProperty.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Objects\ListProperty.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Objects\NumberProperty.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Objects\PuzzleProperty.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Objects\StringProperty.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Puzzle.h" />
+  </ItemGroup>
+</Project>

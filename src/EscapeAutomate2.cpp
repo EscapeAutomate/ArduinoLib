@@ -135,7 +135,7 @@ bool EscapeAutomateClass::SendNotificationToPuzzle(uint16_t senderPuzzleId, uint
 	return SendMessage(MessageId_Notification, output);
 }
 
-void EscapeAutomateClass::Setup(const char* projectId, const char* hubName, const char* ssid, const char* wifiPassword, const char* masterPassword)
+void EscapeAutomateClass::Setup(const char* projectId, const char* hubName, const char* wifiSsid, const char* wifiPassword, const char* masterPassword)
 {
 	Hub.ProjectId = projectId;
 	Hub.Name = hubName;
