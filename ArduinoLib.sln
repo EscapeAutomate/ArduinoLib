@@ -10,6 +10,7 @@ EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		ArduinoLib.vcxitems*{95bc7b95-dc48-4474-886c-6a899c5e9703}*SharedItemsImports = 9
+		ArduinoLib.vcxitems*{c5f80730-f44f-4478-bdae-6634efc2ca88}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86

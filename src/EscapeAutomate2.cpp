@@ -140,7 +140,7 @@ void EscapeAutomateClass::Setup(const char* projectId, const char* hubName, cons
 	Hub.ProjectId = projectId;
 	Hub.Name = hubName;
 
-	this->ssid = ssid;
+	this->ssid = wifiSsid;
 	this->wifiPassword = wifiPassword;
 	this->masterPassword = masterPassword;
 
@@ -162,7 +162,7 @@ void EscapeAutomateClass::Setup(const char* projectId, const char* hubName, cons
 	// run callback when events are occuring
 	wsClient.onEvent(onEventsCallback);
 
-	wsClient.setAuthorization(macAddress, masterPassword);
+	wsClient.setAuthorization((Hub.ProjectId + ";" + Hub.Mac).c_str(), masterPassword);
 
 	for (uint8_t i = 0; i < NumberOfPuzzle; i++)
 	{
