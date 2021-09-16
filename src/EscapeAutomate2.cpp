@@ -1,6 +1,7 @@
 #include "EscapeAutomate2.hpp"
 #include "defines.h"
 #include <WebSockets2_Generic.h>
+#include <Adafruit_NeoPixel.h>
 
 using namespace websockets2_generic;
 
@@ -9,6 +10,8 @@ void onEventsCallback(WebsocketsEvent event, String data);
 
 EscapeAutomateClass EscapeAutomate;
 WebsocketsClient wsClient;
+
+Adafruit_NeoPixel pixels(1, 18, NEO_GRB + NEO_KHZ800);
 
 void onMessageCallback(WebsocketsMessage message)
 {
@@ -167,7 +170,12 @@ void EscapeAutomateClass::Setup(const char* projectId, const char* hubName, cons
 	for (uint8_t i = 0; i < NumberOfPuzzle; i++)
 	{
 		CustomPuzzles[i]->Setup();
-	}
+	}  
+	
+	pixels.setBrightness(10);
+	pixels.begin();
+
+	UpdateStatusLed(false, StatusLedColors_NotConnected);
 }
 
 void EscapeAutomateClass::RegisterPuzzle(Puzzle* puzzle)
@@ -185,6 +193,8 @@ void EscapeAutomateClass::Loop()
 
 	if (WiFi.status() != WL_CONNECTED)
 	{
+		UpdateStatusLed(false, StatusLedColors_NotConnected);
+
 		ESC_LOGINFO("Wifi not connected...");
 		WiFi.begin(ssid, wifiPassword);
 		ESC_LOGINFO("Begin WIFI connection...");
@@ -199,10 +209,10 @@ void EscapeAutomateClass::Loop()
 		if (!MDNS.begin(Hub.Mac.c_str())) {
 			ESC_LOGERROR("Error setting up MDNS responder!");
 
-			while (1) {
-				delay(1000);
-			}
+			UpdateStatusLed(true, StatusLedColors_NotConnected);
 		}
+
+		UpdateStatusLed(false, StatusLedColors_ConnectedToWifi);
 	}
 	else // Connected to wifi
 	{
@@ -255,6 +265,7 @@ void EscapeAutomateClass::Loop()
 								ESC_LOGINFO("master connected !");
 
 								UpdateEngineStatus(HubConnectionStatus_Connected);
+								UpdateStatusLed(false, StatusLedColors_ConnectedToMaster);
 								return;
 							}
 							else
@@ -523,6 +534,37 @@ bool EscapeAutomateClass::SendMessage(MessageId mId, String message)
 	ESC_LOGINFO2("Send message:", mId, message);
 
 	return wsClient.send(output);
+}
+
+void EscapeAutomateClass::UpdateStatusLed(bool isError, StatusLedColors color)
+{
+	if (isError)
+	{
+		while (true)
+		{
+			pixels.setPixelColor(0, pixels.Color(255, 0, 0));
+			delay(500);
+			pixels.setPixelColor(0, pixels.Color(0, 0, 0));
+			delay(500);
+		}
+	}
+
+	switch (color)
+	{
+	case StatusLedColors_NotConnected:
+		pixels.setPixelColor(0, pixels.Color(255, 0, 0));
+		break;
+	case StatusLedColors_ConnectedToWifi:
+		pixels.setPixelColor(0, pixels.Color(255, 128, 0));
+		break;
+	case StatusLedColors_ConnectedToMaster:
+		pixels.setPixelColor(0, pixels.Color(255, 255, 0));
+		break;
+	default:
+		break;
+	}
+
+	pixels.show();
 }
 
 void EscapeAutomateClass::Notification(uint16_t senderPuzzleId, uint16_t puzzleId, const char* jsonValue)

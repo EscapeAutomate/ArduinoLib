@@ -45,3 +45,10 @@ enum MessageId
 	MessageId_Error = 8,
 	MessageId_ScenarioStatusChanged = 9
 };
+
+enum StatusLedColors
+{
+	StatusLedColors_NotConnected = 0,
+	StatusLedColors_ConnectedToWifi = 1,
+	StatusLedColors_ConnectedToMaster = 2
+};

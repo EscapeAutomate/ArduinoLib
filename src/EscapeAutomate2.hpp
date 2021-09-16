@@ -46,6 +46,7 @@ private:
 	bool CallPing();
 	bool IsProjectLoadedOnMaster();
 	bool SendMessage(MessageId mId, String message);
+	void UpdateStatusLed(bool isError, StatusLedColors color);
 
 public:
 	Puzzle* CustomPuzzles[4];
