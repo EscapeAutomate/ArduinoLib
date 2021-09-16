@@ -175,7 +175,7 @@ void EscapeAutomateClass::Setup(const char* projectId, const char* hubName, cons
 	pixels.setBrightness(10);
 	pixels.begin();
 
-	UpdateStatusLed(false, StatusLedColors_NotConnected);
+	UpdateStatusLed(StatusLedColors_NotConnected);
 }
 
 void EscapeAutomateClass::RegisterPuzzle(Puzzle* puzzle)
@@ -193,7 +193,7 @@ void EscapeAutomateClass::Loop()
 
 	if (WiFi.status() != WL_CONNECTED)
 	{
-		UpdateStatusLed(false, StatusLedColors_NotConnected);
+		UpdateStatusLed(StatusLedColors_NotConnected);
 
 		ESC_LOGINFO("Wifi not connected...");
 		WiFi.begin(ssid, wifiPassword);
@@ -209,10 +209,10 @@ void EscapeAutomateClass::Loop()
 		if (!MDNS.begin(Hub.Mac.c_str())) {
 			ESC_LOGERROR("Error setting up MDNS responder!");
 
-			UpdateStatusLed(true, StatusLedColors_NotConnected);
+			UpdateStatusLed(StatusLedColors_NotConnected, true);
 		}
 
-		UpdateStatusLed(false, StatusLedColors_ConnectedToWifi);
+		UpdateStatusLed(StatusLedColors_ConnectedToWifi);
 	}
 	else // Connected to wifi
 	{
@@ -265,7 +265,7 @@ void EscapeAutomateClass::Loop()
 								ESC_LOGINFO("master connected !");
 
 								UpdateEngineStatus(HubConnectionStatus_Connected);
-								UpdateStatusLed(false, StatusLedColors_ConnectedToMaster);
+								UpdateStatusLed(StatusLedColors_ConnectedToMaster);
 								return;
 							}
 							else
@@ -536,7 +536,7 @@ bool EscapeAutomateClass::SendMessage(MessageId mId, String message)
 	return wsClient.send(output);
 }
 
-void EscapeAutomateClass::UpdateStatusLed(bool isError, StatusLedColors color)
+void EscapeAutomateClass::UpdateStatusLed(StatusLedColors color, bool isError = false)
 {
 	if (isError)
 	{

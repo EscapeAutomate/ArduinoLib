@@ -46,7 +46,6 @@ private:
 	bool CallPing();
 	bool IsProjectLoadedOnMaster();
 	bool SendMessage(MessageId mId, String message);
-	void UpdateStatusLed(bool isError, StatusLedColors color);
 
 public:
 	Puzzle* CustomPuzzles[4];
@@ -63,6 +62,7 @@ public:
 	void ChangeProp(uint16_t PuzzleId, uint16_t PropertyId, const char* propertyName, const char* jsonData);
 	bool SendNotificationToPuzzle(uint16_t senderPuzzleId, uint16_t destPuzzleId, const char* Notification);
 	void Notification(uint16_t senderPuzzleId, uint16_t puzzleId, const char* jsonValue);
+	void UpdateStatusLed(StatusLedColors color, bool isError = false);
 	//void SendNotificationToMaster(Puzzle* puzzle, const char* message);
 	//void SendPropertyChanged(Puzzle* puzzle, Property* property);
 	//void SendUpdatePuzzleProperty(Puzzle* puzzle, const char* index, bool boolValue, int intValue, char* strValue);
