@@ -26,6 +26,7 @@
 #include <ArduinoJson.h>
 #include "Puzzle.h"
 #include "Objects/HubProperty.h"
+#include <ArduinoOTA.h>
 
 #define MASTER_HTTP_PROJECT String("/api/Project/")
 #define MASTER_HTTP_HUB String("/api/Hub/")

@@ -170,12 +170,40 @@ void EscapeAutomateClass::Setup(const char* projectId, const char* hubName, cons
 	for (uint8_t i = 0; i < NumberOfPuzzle; i++)
 	{
 		CustomPuzzles[i]->Setup();
-	}  
-	
+	}
+
 	pixels.setBrightness(10);
 	pixels.begin();
 
 	UpdateStatusLed(StatusLedColors_NotConnected, false);
+
+	ArduinoOTA.setHostname(Hub.Name.c_str());
+	ArduinoOTA.setPassword(this->masterPassword);
+	ArduinoOTA
+		.onStart([]() {
+			String type;
+			if (ArduinoOTA.getCommand() == U_FLASH)
+				type = "sketch";
+			else // U_SPIFFS
+				type = "filesystem";
+
+			// NOTE: if updating SPIFFS this would be the place to unmount SPIFFS using SPIFFS.end()
+			Serial.println("Start updating " + type);
+		})
+		.onEnd([]() {
+			Serial.println("\nEnd");
+		})
+		.onProgress([](unsigned int progress, unsigned int total) {
+			Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
+		})
+		.onError([](ota_error_t error) {
+			Serial.printf("Error[%u]: ", error);
+			if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
+			else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
+			else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
+			else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
+			else if (error == OTA_END_ERROR) Serial.println("End Failed");
+		});
 }
 
 void EscapeAutomateClass::RegisterPuzzle(Puzzle* puzzle)
@@ -190,6 +218,7 @@ void EscapeAutomateClass::RegisterPuzzle(Puzzle* puzzle)
 void EscapeAutomateClass::Loop()
 {
 	wsClient.poll();
+	ArduinoOTA.handle();
 
 	if (WiFi.status() != WL_CONNECTED)
 	{
@@ -206,11 +235,14 @@ void EscapeAutomateClass::Loop()
 
 		ESC_LOGINFO3("Wifi connected to", WiFi.SSID(), "IP address:", WiFi.localIP());
 
-		if (!MDNS.begin(Hub.Mac.c_str())) {
+		/*if (!MDNS.begin(Hub.Mac.c_str())) {
 			ESC_LOGERROR("Error setting up MDNS responder!");
 
 			UpdateStatusLed(StatusLedColors_NotConnected, true);
-		}
+		}*/
+
+		// ArduinoOTA already register MDNS
+		ArduinoOTA.begin();
 
 		UpdateStatusLed(StatusLedColors_ConnectedToWifi, false);
 	}
