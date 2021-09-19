@@ -321,6 +321,7 @@ void EscapeAutomateClass::Loop()
 				{
 					// TODO close the websocket
 					UpdateEngineStatus(HubConnectionStatus_NotConnected);
+					UpdateStatusLed(StatusLedColors_ConnectedToWifi, false);
 				}
 			}
 		}
@@ -587,10 +588,10 @@ void EscapeAutomateClass::UpdateStatusLed(StatusLedColors color, bool isError)
 		pixels.setPixelColor(0, pixels.Color(255, 0, 0));
 		break;
 	case StatusLedColors_ConnectedToWifi:
-		pixels.setPixelColor(0, pixels.Color(255, 128, 0));
+		pixels.setPixelColor(0, pixels.Color(0, 0, 255));
 		break;
 	case StatusLedColors_ConnectedToMaster:
-		pixels.setPixelColor(0, pixels.Color(255, 255, 0));
+		pixels.setPixelColor(0, pixels.Color(0, 255, 0));
 		break;
 	default:
 		break;
