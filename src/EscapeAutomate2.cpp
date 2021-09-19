@@ -175,7 +175,7 @@ void EscapeAutomateClass::Setup(const char* projectId, const char* hubName, cons
 	pixels.setBrightness(10);
 	pixels.begin();
 
-	UpdateStatusLed(StatusLedColors_NotConnected);
+	UpdateStatusLed(StatusLedColors_NotConnected, false);
 }
 
 void EscapeAutomateClass::RegisterPuzzle(Puzzle* puzzle)
@@ -193,7 +193,7 @@ void EscapeAutomateClass::Loop()
 
 	if (WiFi.status() != WL_CONNECTED)
 	{
-		UpdateStatusLed(StatusLedColors_NotConnected);
+		UpdateStatusLed(StatusLedColors_NotConnected, false);
 
 		ESC_LOGINFO("Wifi not connected...");
 		WiFi.begin(ssid, wifiPassword);
@@ -212,7 +212,7 @@ void EscapeAutomateClass::Loop()
 			UpdateStatusLed(StatusLedColors_NotConnected, true);
 		}
 
-		UpdateStatusLed(StatusLedColors_ConnectedToWifi);
+		UpdateStatusLed(StatusLedColors_ConnectedToWifi, false);
 	}
 	else // Connected to wifi
 	{
@@ -265,7 +265,7 @@ void EscapeAutomateClass::Loop()
 								ESC_LOGINFO("master connected !");
 
 								UpdateEngineStatus(HubConnectionStatus_Connected);
-								UpdateStatusLed(StatusLedColors_ConnectedToMaster);
+								UpdateStatusLed(StatusLedColors_ConnectedToMaster, false);
 								return;
 							}
 							else
@@ -536,7 +536,7 @@ bool EscapeAutomateClass::SendMessage(MessageId mId, String message)
 	return wsClient.send(output);
 }
 
-void EscapeAutomateClass::UpdateStatusLed(StatusLedColors color, bool isError = false)
+void EscapeAutomateClass::UpdateStatusLed(StatusLedColors color, bool isError)
 {
 	if (isError)
 	{
