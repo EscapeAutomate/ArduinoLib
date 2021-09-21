@@ -167,13 +167,13 @@ void EscapeAutomateClass::Setup(const char* projectId, const char* hubName, cons
 
 	wsClient.setAuthorization((Hub.ProjectId + ";" + Hub.Mac).c_str(), masterPassword);
 
+	pixels.setBrightness(10);
+	pixels.begin();
+
 	for (uint8_t i = 0; i < NumberOfPuzzle; i++)
 	{
 		CustomPuzzles[i]->Setup();
 	}
-
-	pixels.setBrightness(10);
-	pixels.begin();
 
 	UpdateStatusLed(StatusLedColors_NotConnected, false);
 
