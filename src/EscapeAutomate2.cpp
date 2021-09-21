@@ -170,11 +170,6 @@ void EscapeAutomateClass::Setup(const char* projectId, const char* hubName, cons
 	pixels.setBrightness(10);
 	pixels.begin();
 
-	for (uint8_t i = 0; i < NumberOfPuzzle; i++)
-	{
-		CustomPuzzles[i]->Setup();
-	}
-
 	UpdateStatusLed(StatusLedColors_NotConnected, false);
 
 	ArduinoOTA.setHostname(Hub.Name.c_str());
@@ -204,6 +199,11 @@ void EscapeAutomateClass::Setup(const char* projectId, const char* hubName, cons
 			else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
 			else if (error == OTA_END_ERROR) Serial.println("End Failed");
 		});
+
+	for (uint8_t i = 0; i < NumberOfPuzzle; i++)
+	{
+		CustomPuzzles[i]->Setup();
+	}
 }
 
 void EscapeAutomateClass::RegisterPuzzle(Puzzle* puzzle)
