@@ -569,7 +569,7 @@ bool EscapeAutomateClass::SendMessage(MessageId mId, String message)
 	return wsClient.send(output);
 }
 
-void EscapeAutomateClass::UpdateStatusLed(StatusLedColors color, bool isError)
+void EscapeAutomateClass::UpdateStatusLed(StatusLedColors status, bool isError)
 {
 	if (isError)
 	{
@@ -582,7 +582,7 @@ void EscapeAutomateClass::UpdateStatusLed(StatusLedColors color, bool isError)
 		}
 	}
 
-	switch (color)
+	switch (status)
 	{
 	case StatusLedColors_NotConnected:
 		pixels.setPixelColor(0, pixels.Color(255, 0, 0));

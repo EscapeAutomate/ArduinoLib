@@ -54,7 +54,7 @@ bool StringProperty::ChangeProperty(uint16_t puzzleId, String value)
     StaticJsonDocument<20> doc;
     this->Value = value;
 
-    doc["value"] = Value;
+    doc.set(Value);
 
     String json;
 

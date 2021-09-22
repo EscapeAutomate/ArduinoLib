@@ -16,6 +16,7 @@ public:
 	BoolProperty(uint16_t propertyId, String name) : BaseProperty(propertyId, name)
 	{
 		PropertyType = WellKnowObjectIds_Bool;
+		Value = true;
 	}
 };
 
