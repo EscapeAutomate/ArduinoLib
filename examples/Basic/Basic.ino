@@ -19,9 +19,9 @@ public:
 
 	void Setup()
 	{
-		testBool = new BoolProperty(1, "testBool");
-		testInt = new NumberProperty(2, "testNumber");
-		testString = new StringProperty(3, "testString");
+		testBool = new BoolProperty(1, "testBool", false);
+		testInt = new NumberProperty(2, "testNumber", 27);
+		testString = new StringProperty(3, "testString", "blablabla");
 		testList = new ListProperty(4, "testList", false, true, new String[2]{ "value1", "value2" }, 2, new String[2]{ "value1","value2" }, 0);
 
 		RegisterProperty(testBool);

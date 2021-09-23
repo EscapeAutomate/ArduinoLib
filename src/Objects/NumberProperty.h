@@ -13,10 +13,10 @@ public:
 	bool ChangeProperty(uint16_t puzzleId, const char* propertyName, const char* jsonData);
 	bool ChangeProperty(uint16_t puzzleId, float_t value);
 
-	NumberProperty(uint16_t propertyId, String name) : BaseProperty(propertyId, name)
+	NumberProperty(uint16_t propertyId, String name, float_t value = 0) : BaseProperty(propertyId, name)
 	{
 		PropertyType = WellKnowObjectIds_Int;
-		Value = 0;
+		Value = value;
 	}
 };
 
