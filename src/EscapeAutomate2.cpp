@@ -1,9 +1,14 @@
 #include "EscapeAutomate2.hpp"
-#include "defines.h"
-#include <WebSockets2_Generic.h>
+#include <WebSocket/ArduinoWebsockets.h>
+#include <WebSocket/tiny_websockets/internals/wscrypto/crypto.hpp>
+#include <ESPmDNS.h>
+#include <ArduinoJson.h>
 #include <Adafruit_NeoPixel.h>
+#include <ArduinoOTA.h>
+#include "WiFi.h"
+#include "defines.h"
 
-using namespace websockets2_generic;
+using namespace websockets;
 
 void onMessageCallback(WebsocketsMessage message);
 void onEventsCallback(WebsocketsEvent event, String data);
@@ -165,7 +170,15 @@ void EscapeAutomateClass::Setup(const char* projectId, const char* hubName, cons
 	// run callback when events are occuring
 	wsClient.onEvent(onEventsCallback);
 
-	wsClient.setAuthorization((Hub.ProjectId + ";" + Hub.Mac).c_str(), masterPassword);
+	//wsClient.setAuthorization((Hub.ProjectId + ";" + Hub.Mac).c_str(), masterPassword);
+	String auth = Hub.ProjectId + ";" + Hub.Mac;
+	auth += ":";
+	auth += masterPassword;
+
+	WSString b64Auth = crypto::base64Encode((uint8_t*)auth.c_str(), auth.length());
+	WSString basic = "Basic ";
+
+	wsClient.addHeader("Authorization", basic.append(b64Auth).c_str());
 
 	pixels.setBrightness(10);
 	pixels.begin();

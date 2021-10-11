@@ -26,6 +26,11 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Objects\PuzzleProperty.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Objects\StringProperty.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Puzzle.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\WebSocket\crypto.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\WebSocket\message.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\WebSocket\websockets_client.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\WebSocket\websockets_endpoint.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\WebSocket\ws_common.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)src\defines.h" />
@@ -40,5 +45,19 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Objects\PuzzleProperty.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Objects\StringProperty.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Puzzle.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\WebSocket\ArduinoWebsockets.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\WebSocket\tiny_websockets\client.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\WebSocket\tiny_websockets\internals\data_frame.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\WebSocket\tiny_websockets\internals\websockets_endpoint.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\WebSocket\tiny_websockets\internals\wscrypto\base64.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\WebSocket\tiny_websockets\internals\wscrypto\crypto.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\WebSocket\tiny_websockets\internals\wscrypto\sha1.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\WebSocket\tiny_websockets\internals\ws_common.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\WebSocket\tiny_websockets\message.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\WebSocket\tiny_websockets\network\esp32_tcp.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\WebSocket\tiny_websockets\network\generic_esp_clients.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\WebSocket\tiny_websockets\network\tcp_client.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\WebSocket\tiny_websockets\network\tcp_socket.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\WebSocket\tiny_websockets\ws_config_defs.hpp" />
   </ItemGroup>
 </Project>

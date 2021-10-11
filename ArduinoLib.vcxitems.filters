@@ -15,6 +15,24 @@
     <Filter Include="Source Files\Objects">
       <UniqueIdentifier>{7018f011-edb5-4de7-b0a0-1dd8cb7c8c7b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\WebSocket">
+      <UniqueIdentifier>{1a607d75-02cf-4229-b7f2-a486d47b6d34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\WebSocket">
+      <UniqueIdentifier>{cce17f92-ee90-45e4-8a68-321eb84551f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\WebSocket\tiny_websockets">
+      <UniqueIdentifier>{7e86af74-bed2-430a-ab20-c54a32b964dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\WebSocket\tiny_websockets\network">
+      <UniqueIdentifier>{50915c55-a49e-4926-806c-298307076735}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\WebSocket\tiny_websockets\internals">
+      <UniqueIdentifier>{78f13636-a2b0-40a0-a831-481753101bbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\WebSocket\tiny_websockets\internals\wscrypto">
+      <UniqueIdentifier>{d14a9c1c-8e8a-4137-bcee-e5d0c7f7c83a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)src\EscapeAutomate2.cpp">
@@ -43,6 +61,21 @@
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Objects\StringProperty.cpp">
       <Filter>Source Files\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\WebSocket\crypto.cpp">
+      <Filter>Source Files\WebSocket</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\WebSocket\message.cpp">
+      <Filter>Source Files\WebSocket</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\WebSocket\websockets_client.cpp">
+      <Filter>Source Files\WebSocket</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\WebSocket\websockets_endpoint.cpp">
+      <Filter>Source Files\WebSocket</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\WebSocket\ws_common.cpp">
+      <Filter>Source Files\WebSocket</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -84,6 +117,48 @@
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Objects\StringProperty.h">
       <Filter>Header Files\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\WebSocket\ArduinoWebsockets.h">
+      <Filter>Header Files\WebSocket</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\WebSocket\tiny_websockets\client.hpp">
+      <Filter>Header Files\WebSocket\tiny_websockets</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\WebSocket\tiny_websockets\message.hpp">
+      <Filter>Header Files\WebSocket\tiny_websockets</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\WebSocket\tiny_websockets\ws_config_defs.hpp">
+      <Filter>Header Files\WebSocket\tiny_websockets</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\WebSocket\tiny_websockets\network\tcp_client.hpp">
+      <Filter>Header Files\WebSocket\tiny_websockets\network</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\WebSocket\tiny_websockets\network\tcp_socket.hpp">
+      <Filter>Header Files\WebSocket\tiny_websockets\network</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\WebSocket\tiny_websockets\network\generic_esp_clients.hpp">
+      <Filter>Header Files\WebSocket\tiny_websockets\network</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\WebSocket\tiny_websockets\network\esp32_tcp.hpp">
+      <Filter>Header Files\WebSocket\tiny_websockets\network</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\WebSocket\tiny_websockets\internals\data_frame.hpp">
+      <Filter>Header Files\WebSocket\tiny_websockets\internals</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\WebSocket\tiny_websockets\internals\websockets_endpoint.hpp">
+      <Filter>Header Files\WebSocket\tiny_websockets\internals</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\WebSocket\tiny_websockets\internals\ws_common.hpp">
+      <Filter>Header Files\WebSocket\tiny_websockets\internals</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\WebSocket\tiny_websockets\internals\wscrypto\base64.hpp">
+      <Filter>Header Files\WebSocket\tiny_websockets\internals\wscrypto</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\WebSocket\tiny_websockets\internals\wscrypto\crypto.hpp">
+      <Filter>Header Files\WebSocket\tiny_websockets\internals\wscrypto</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\WebSocket\tiny_websockets\internals\wscrypto\sha1.hpp">
+      <Filter>Header Files\WebSocket\tiny_websockets\internals\wscrypto</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
