@@ -35,7 +35,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="$(MSBuildThisFileDirectory)src\EscapeAutomate2.cpp">
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\EscapeAutomate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Puzzle.cpp">
@@ -88,7 +88,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Enums.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)src\EscapeAutomate2.hpp">
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\EscapeAutomate.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)src\defines.h">

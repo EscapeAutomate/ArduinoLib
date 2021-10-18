@@ -1,5 +1,5 @@
 #include "PuzzleProperty.h"
-#include "EscapeAutomate2.hpp"
+#include "EscapeAutomate.hpp"
 #include "EscLogs.h"
 
 String PuzzleProperty::Serialize()

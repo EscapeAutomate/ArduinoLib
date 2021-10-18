@@ -1,5 +1,5 @@
 #include "Puzzle.h"
-#include "EscapeAutomate2.hpp"
+#include "EscapeAutomate.hpp"
 
 void Puzzle::RegisterProperty(BaseProperty* prop)
 {

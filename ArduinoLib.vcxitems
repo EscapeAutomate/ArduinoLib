@@ -17,7 +17,7 @@
     <Text Include="$(MSBuildThisFileDirectory)library.properties" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="$(MSBuildThisFileDirectory)src\EscapeAutomate2.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\EscapeAutomate.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Objects\BaseProperty.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Objects\BoolProperty.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Objects\HubProperty.cpp" />
@@ -35,7 +35,7 @@
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)src\defines.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Enums.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)src\EscapeAutomate2.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\EscapeAutomate.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\EscLogs.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Objects\BoolProperty.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Objects\HubProperty.h" />

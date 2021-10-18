@@ -1,5 +1,5 @@
-#ifndef _EscapeAutomate2_h
-#define _EscapeAutomate2_h
+#ifndef _EscapeAutomate_h
+#define _EscapeAutomate_h
 #pragma once
 
 // Change _ES_LOGLEVEL_ to set tracing and logging verbosity

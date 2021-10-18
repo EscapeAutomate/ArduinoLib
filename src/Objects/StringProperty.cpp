@@ -1,5 +1,5 @@
 #include "StringProperty.h"
-#include "EscapeAutomate2.hpp"
+#include "EscapeAutomate.hpp"
 
 extern EscapeAutomateClass EscapeAutomate;
 

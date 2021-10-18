@@ -1,5 +1,5 @@
 #include "NumberProperty.h"
-#include "EscapeAutomate2.hpp"
+#include "EscapeAutomate.hpp"
 #include "BoolProperty.h"
 
 extern EscapeAutomateClass EscapeAutomate;

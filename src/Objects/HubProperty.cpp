@@ -1,5 +1,5 @@
 #include "HubProperty.h"
-#include "EscapeAutomate2.hpp"
+#include "EscapeAutomate.hpp"
 
 String HubProperty::Serialize()
 {
