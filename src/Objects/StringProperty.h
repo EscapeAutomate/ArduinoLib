@@ -10,8 +10,8 @@ public:
 
 	String Serialize();
 	void FillJson(JsonObject* doc);
-	bool ChangeProperty(uint16_t puzzleId, const char* propertyName, const char* jsonData);
-	bool ChangeProperty(uint16_t puzzleId, String value);
+	bool ChangeProperty(const char* propertyName, const char* jsonData);
+	bool ChangeProperty(String value);
 
 	StringProperty(uint16_t propertyId, String name, String value = "") : BaseProperty(propertyId, name)
 	{

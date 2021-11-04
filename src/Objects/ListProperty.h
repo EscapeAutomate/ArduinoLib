@@ -18,7 +18,7 @@ public:
 
 	String Serialize();
 	void FillJson(JsonObject* doc);
-	bool ChangeProperty(uint16_t puzzleId, const char* propertyName, const char* jsonData);
+	bool ChangeProperty(const char* propertyName, const char* jsonData);
 
 	void AddValue(String string);
 

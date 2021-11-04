@@ -22,7 +22,6 @@ void onMessageCallback(WebsocketsMessage message)
 {
 	ESC_LOGINFO1("recv message:", message.data());
 
-
 	DynamicJsonDocument doc(4096);
 
 	DeserializationError error = deserializeJson(doc, message.data());
@@ -118,8 +117,8 @@ void EscapeAutomateClass::ChangeProp(uint16_t puzzleId, uint16_t propertyId, con
 			{
 				if (prop.second->PropertyId == propertyId)
 				{
-					prop.second->ChangeProperty(puzzleId, propertyName, jsonData);
-					puzzle->PropertyChanged(prop.second->PropertyId);
+					prop.second->ChangeProperty(propertyName, jsonData);
+					puzzle->PropertyChanged(prop.second->PropertyId, PropertyChangedBy_Master);
 					break;
 				}
 			}
@@ -388,6 +387,8 @@ bool EscapeAutomateClass::SendHubPropertyChanged(uint16_t propertyId, String pro
 
 bool EscapeAutomateClass::SendPuzzlePropertyChanged(uint16_t puzzleId, uint16_t propertyId, String propertyName, String value)
 {
+	EscapeAutomate.CustomPuzzles[puzzleId]->PropertyChanged(propertyId, PropertyChangedBy_MyCode);
+
 	DynamicJsonDocument doc(1024);
 	String output;
 

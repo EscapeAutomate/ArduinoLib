@@ -28,6 +28,8 @@ public:
 		RegisterProperty(testInt);
 		RegisterProperty(testString);
 		RegisterProperty(testList);
+
+		testBool->ChangeProperty(true);
 	}
 
 	void Start()
@@ -54,7 +56,7 @@ public:
 	{
 	}
 
-	void PropertyChanged(uint16_t propertyId)
+	void PropertyChanged(uint16_t propertyId, PropertyChangedBy changedBy)
 	{
 		switch (propertyId)
 		{

@@ -24,7 +24,7 @@ void PuzzleProperty::FillJson(JsonObject* obj)
     (*obj)["puzzleId"] = PuzzleId;
 }
 
-bool PuzzleProperty::ChangeProperty(uint16_t puzzleId, const char* propertyName, const char* jsonData)
+bool PuzzleProperty::ChangeProperty(const char* propertyName, const char* jsonData)
 {
     if (strcmp(propertyName, "Status") == 0)
     {
@@ -41,7 +41,7 @@ bool PuzzleProperty::ChangeProperty(uint16_t puzzleId, const char* propertyName,
         PuzzleStatus status = (PuzzleStatus)doc.as<uint16_t>();
 
         EscapeAutomate.ManagePuzzleStatusChange(ParentPuzzleId, status);
-        return EscapeAutomate.SendPuzzlePropertyChanged(puzzleId, PropertyId, propertyName, jsonData);
+        return EscapeAutomate.SendPuzzlePropertyChanged(ParentPuzzleId, PropertyId, propertyName, jsonData);
     }
     else if (strcmp(propertyName,"Difficulty") == 0)
     {
@@ -59,7 +59,7 @@ bool PuzzleProperty::ChangeProperty(uint16_t puzzleId, const char* propertyName,
 
         this->DifficultyValue = (Difficulty)difficulty;
 
-        return EscapeAutomate.SendPuzzlePropertyChanged(puzzleId, PropertyId, propertyName, jsonData);
+        return EscapeAutomate.SendPuzzlePropertyChanged(ParentPuzzleId, PropertyId, propertyName, jsonData);
     }
     else
     {

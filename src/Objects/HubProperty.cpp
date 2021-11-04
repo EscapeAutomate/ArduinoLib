@@ -22,7 +22,7 @@ void HubProperty::FillJson(JsonObject* obj)
     (*obj)["mac"] = Mac;
 }
 
-bool HubProperty::ChangeProperty(uint16_t puzzleId, const char* propertyName, const char* jsonData)
+bool HubProperty::ChangeProperty(const char* propertyName, const char* jsonData)
 {
     return false;
 }

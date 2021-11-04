@@ -52,3 +52,9 @@ enum StatusLedColors
 	StatusLedColors_ConnectedToWifi = 1,
 	StatusLedColors_ConnectedToMaster = 2
 };
+
+enum PropertyChangedBy
+{
+	PropertyChangedBy_MyCode = 0,
+	PropertyChangedBy_Master = 1
+};

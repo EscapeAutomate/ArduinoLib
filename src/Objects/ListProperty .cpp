@@ -65,7 +65,7 @@ void ListProperty::FillJson(JsonObject* doc)
 	}
 }
 
-bool ListProperty::ChangeProperty(uint16_t puzzleId, const char* propertyName, const char* jsonData)
+bool ListProperty::ChangeProperty(const char* propertyName, const char* jsonData)
 {
 	if (strcmp(propertyName, "SelectedValues") == 0)
 	{
@@ -86,7 +86,7 @@ bool ListProperty::ChangeProperty(uint16_t puzzleId, const char* propertyName, c
 			this->SelectedValues.insert(SelectedValues.end(), doc[i].as<uint16_t>());
 		}
 
-		return EscapeAutomate.SendPuzzlePropertyChanged(puzzleId, PropertyId, propertyName, jsonData);
+		return EscapeAutomate.SendPuzzlePropertyChanged(ParentPuzzleId, PropertyId, propertyName, jsonData);
 	}
 	else
 	{

@@ -23,7 +23,7 @@ void BoolProperty::FillJson(JsonObject* doc)
 	(*doc)["value"] = Value;
 }
 
-bool BoolProperty::ChangeProperty(uint16_t puzzleId, const char* propertyName, const char* jsonData)
+bool BoolProperty::ChangeProperty(const char* propertyName, const char* jsonData)
 {
 	if (strcmp(propertyName, "Value") == 0)
 	{
@@ -39,7 +39,7 @@ bool BoolProperty::ChangeProperty(uint16_t puzzleId, const char* propertyName, c
 
 		this->Value = doc.as<bool>();
 
-		return EscapeAutomate.SendPuzzlePropertyChanged(puzzleId, PropertyId, propertyName, jsonData);
+		return EscapeAutomate.SendPuzzlePropertyChanged(ParentPuzzleId, PropertyId, propertyName, jsonData);
 
 	}
 	else
@@ -51,7 +51,7 @@ bool BoolProperty::ChangeProperty(uint16_t puzzleId, const char* propertyName, c
 	return false;
 }
 
-bool BoolProperty::ChangeProperty(uint16_t puzzleId, bool value)
+bool BoolProperty::ChangeProperty(bool value)
 {
 	this->Value = value;
 
@@ -63,5 +63,5 @@ bool BoolProperty::ChangeProperty(uint16_t puzzleId, bool value)
 
 	serializeJson(doc, json);
 
-	return EscapeAutomate.SendPuzzlePropertyChanged(puzzleId, PropertyId, "value", json);
+	return EscapeAutomate.SendPuzzlePropertyChanged(ParentPuzzleId, PropertyId, "value", json);
 }

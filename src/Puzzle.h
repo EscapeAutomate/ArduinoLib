@@ -33,7 +33,7 @@ public:
 	virtual void Loop() = 0;
 	virtual void Notification(uint16_t senderId, const char* jsonValue) = 0;
 	virtual void Completed() = 0;
-	virtual void PropertyChanged(uint16_t propertyId) = 0;
+	virtual void PropertyChanged(uint16_t propertyId, PropertyChangedBy changedBy) = 0;
 };
 
 #endif
