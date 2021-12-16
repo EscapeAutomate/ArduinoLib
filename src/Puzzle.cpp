@@ -20,5 +20,7 @@ void Puzzle::InnerLoop(void* puzzle)
 	while (true)
 	{
 		puz->Loop();
+		// just to be sure
+		delay(1);
 	}
 }
