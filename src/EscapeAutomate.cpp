@@ -262,8 +262,7 @@ void EscapeAutomateClass::Loop()
 	{
 		if (Hub.Status == HubConnectionStatus_NotConnected)
 		{
-			int n = MDNS.queryService("escapeautomatemaster2", "tcp"); 
-			lastDiscoverTime = millis();
+			int n = MDNS.queryService("escapeautomatemaster2", "tcp");
 
 			if (n == 0)
 			{
