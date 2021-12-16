@@ -37,7 +37,6 @@ private:
 	String masterIp;
 	uint16_t masterPort;
 	unsigned long lastSendedMessageTime = 0;
-	unsigned long lastDiscoverTime = 0;
 
 	bool CallRegisterHub();
 	bool CallPing();

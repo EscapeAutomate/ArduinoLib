@@ -260,7 +260,7 @@ void EscapeAutomateClass::Loop()
 	}
 	else // Connected to wifi
 	{
-		if (millis() - lastDiscoverTime > 5000 && Hub.Status == HubConnectionStatus_NotConnected)
+		if (Hub.Status == HubConnectionStatus_NotConnected)
 		{
 			int n = MDNS.queryService("escapeautomatemaster2", "tcp"); 
 			lastDiscoverTime = millis();
