@@ -260,14 +260,14 @@ void EscapeAutomateClass::Loop()
 	}
 	else // Connected to wifi
 	{
-		if (Hub.Status == HubConnectionStatus_NotConnected)
+		if (millis() - lastDiscoverTime > 5000 && Hub.Status == HubConnectionStatus_NotConnected)
 		{
-			int n = MDNS.queryService("escapeautomatemaster2", "tcp");
+			int n = MDNS.queryService("escapeautomatemaster2", "tcp"); 
+			lastDiscoverTime = millis();
 
 			if (n == 0)
 			{
 				ESC_LOGINFO("no master found");
-				delay(10000); // we wait a little before retrying
 				return;
 			}
 			else
@@ -440,11 +440,6 @@ bool EscapeAutomateClass::CallRegisterHub()
 		}
 	}
 
-	if (measureJson(doc) > 4000)
-	{
-		// return error
-	}
-
 	String output;
 	serializeJson(doc, output);
 
@@ -565,6 +560,12 @@ bool EscapeAutomateClass::SendMessage(MessageId mId, String message)
 	if (mId != MessageId_Register && Hub.Status == HubConnectionStatus_NotConnected)
 	{
 		return false;
+	}
+
+	if (message.length() > 4000)
+	{
+		ESC_LOGWARN1("Message bigger than 4000 bytes: ", message.length());
+		ESC_LOGWARN(message);
 	}
 
 	lastSendedMessageTime = millis();
