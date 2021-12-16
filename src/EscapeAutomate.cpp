@@ -215,6 +215,15 @@ void EscapeAutomateClass::Setup(const char* projectId, const char* hubName, cons
 	for (uint8_t i = 0; i < NumberOfPuzzle; i++)
 	{
 		CustomPuzzles[i]->Setup();
+
+		xTaskCreate(
+			CustomPuzzles[i]->InnerLoop,    // Function that should be called
+			CustomPuzzles[i]->PuzzleObject->Name.c_str(),   // Name of the task (for debugging)
+			1000,            // Stack size (bytes)
+			CustomPuzzles[i],            // Parameter to pass
+			1,               // Task priority
+			NULL             // Task handle
+		);
 	}
 }
 
@@ -267,7 +276,6 @@ void EscapeAutomateClass::Loop()
 			if (n == 0)
 			{
 				ESC_LOGINFO("no master found");
-				return;
 			}
 			else
 			{
@@ -335,11 +343,6 @@ void EscapeAutomateClass::Loop()
 					UpdateStatusLed(StatusLedColors_ConnectedToWifi, false);
 				}
 			}
-		}
-
-		for (uint8_t i = 0; i < NumberOfPuzzle; i++)
-		{
-			CustomPuzzles[i]->Loop();
 		}
 	}
 }

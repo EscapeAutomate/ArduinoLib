@@ -25,6 +25,7 @@ public:
 
 	void RegisterProperty(BaseProperty* prop);
 	void UpdatePuzzleStatus(PuzzleStatus status);
+	static void InnerLoop(void* parameter);
 
 	virtual void Setup() = 0;
 	virtual void Start() = 0;
