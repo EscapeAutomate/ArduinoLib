@@ -54,6 +54,18 @@ public:
 
 	void Completed()
 	{
+		switch (PuzzleObject->Status)
+		{
+		case PuzzleStatus_Stopped:
+		case PuzzleStatus_Reseted:
+		case PuzzleStatus_Completed:
+			break;
+		case PuzzleStatus_Started:
+		case PuzzleStatus_Disconnected:
+		case PuzzleStatus_Connected:
+		default:
+			break;
+		}
 	}
 
 	void PropertyChanged(uint16_t propertyId, PropertyChangedBy changedBy)

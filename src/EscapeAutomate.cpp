@@ -109,21 +109,29 @@ bool IsSuccessCode(int httpResponseCode)
 
 void EscapeAutomateClass::ChangeProp(uint16_t puzzleId, uint16_t propertyId, const char* propertyName, const char* jsonData)
 {
-	for (Puzzle* puzzle : EscapeAutomate.CustomPuzzles)
+	if (puzzleId == 65535) // all puzzles
 	{
-		if (puzzleId == 65535 || puzzle->PuzzleObject->PuzzleId == puzzleId)
+		for (auto const& puzzle : EscapeAutomate.CustomPuzzles)
 		{
-			for (std::pair<uint16_t, BaseProperty*> prop : puzzle->Properties)
+			for (auto const& prop : puzzle.second->Properties)
 			{
 				if (prop.second->PropertyId == propertyId)
 				{
-					prop.second->ChangeProperty(propertyName, jsonData);
-					puzzle->PropertyChanged(prop.second->PropertyId, PropertyChangedBy_Master);
+					prop.second->ChangeProperty(propertyName, jsonData, PropertyChangedBy_Master);
 					break;
 				}
 			}
-
-			if (puzzleId != 65535) break;
+		}
+	}
+	else if (EscapeAutomate.CustomPuzzles.count(puzzleId) == 1)
+	{
+		for (auto const& prop : EscapeAutomate.CustomPuzzles[puzzleId]->Properties)
+		{
+			if (prop.second->PropertyId == propertyId)
+			{
+				prop.second->ChangeProperty(propertyName, jsonData, PropertyChangedBy_Master);
+				break;
+			}
 		}
 	}
 }
@@ -387,10 +395,9 @@ bool EscapeAutomateClass::SendHubPropertyChanged(uint16_t propertyId, String pro
 	return SendMessage(MessageId_HubPropertyChanged, output);
 }
 
-bool EscapeAutomateClass::SendPuzzlePropertyChanged(uint16_t puzzleId, uint16_t propertyId, String propertyName, String value)
+bool EscapeAutomateClass::SendPuzzlePropertyChanged(uint16_t puzzleId, uint16_t propertyId, String propertyName, String value, PropertyChangedBy propertyChangedBy)
 {
-	EscapeAutomate.CustomPuzzles[puzzleId]->PropertyChanged(propertyId, PropertyChangedBy_MyCode);
-
+	EscapeAutomate.CustomPuzzles[puzzleId]->PropertyChanged(propertyId, propertyChangedBy);
 	DynamicJsonDocument doc(1024);
 	String output;
 
@@ -619,39 +626,30 @@ void EscapeAutomateClass::UpdateStatusLed(StatusLedColors status, bool isError)
 
 void EscapeAutomateClass::Notification(uint16_t senderPuzzleId, uint16_t puzzleId, const char* jsonValue)
 {
-	for (Puzzle* puzzle : EscapeAutomate.CustomPuzzles)
+	if (EscapeAutomate.CustomPuzzles.count(puzzleId) == 1)
 	{
-		if (puzzle->PuzzleObject->PuzzleId == puzzleId)
-		{
-			puzzle->Notification(senderPuzzleId, jsonValue);
-			return;
-		}
+		EscapeAutomate.CustomPuzzles[puzzleId]->Notification(senderPuzzleId, jsonValue);
 	}
 }
 
 void EscapeAutomateClass::ManagePuzzleStatusChange(uint16_t puzzleId, PuzzleStatus puzzleStatus)
 {
-	for (Puzzle* puzzle : EscapeAutomate.CustomPuzzles)
+	if (EscapeAutomate.CustomPuzzles.count(puzzleId) == 1)
 	{
-		if (puzzle->PuzzleObject->PuzzleId == puzzleId)
+		switch (puzzleStatus)
 		{
-			switch (puzzleStatus)
-			{
-			case PuzzleStatus_Started:
-				puzzle->Start();
-				break;
-			case PuzzleStatus_Stopped:
-				puzzle->Stop();
-				break;
-			case PuzzleStatus_Reseted:
-				puzzle->Reset();
-				break;
-			case PuzzleStatus_Completed:
-				puzzle->Completed();
-				break;
-			}
-
-			return;
+		case PuzzleStatus_Started:
+			EscapeAutomate.CustomPuzzles[puzzleId]->Start();
+			break;
+		case PuzzleStatus_Stopped:
+			EscapeAutomate.CustomPuzzles[puzzleId]->Stop();
+			break;
+		case PuzzleStatus_Reseted:
+			EscapeAutomate.CustomPuzzles[puzzleId]->Reset();
+			break;
+		case PuzzleStatus_Completed:
+			EscapeAutomate.CustomPuzzles[puzzleId]->Completed();
+			break;
 		}
 	}
 }

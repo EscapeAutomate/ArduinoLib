@@ -7,8 +7,3 @@ void BaseProperty::FillBaseJson(JsonObject* doc)
     (*doc)["id"] = PropertyId;
     (*doc)["propertyType"] = PropertyType;
 }
-
-bool BaseProperty::SendPuzzlePropertyChanged(uint16_t propertyId, String propertyName, String value)
-{
-    return EscapeAutomate.SendPuzzlePropertyChanged(ParentPuzzleId, propertyId, propertyName, value);
-}

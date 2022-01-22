@@ -12,7 +12,7 @@ public:
 
 	String Serialize();
 	void FillJson(JsonObject* obj); 
-	bool ChangeProperty(const char* propertyName, const char* jsonData);
+	bool ChangeProperty(const char* propertyName, const char* jsonData, PropertyChangedBy propertyChangedBy = PropertyChangedBy_MyCode);
 
 	HubProperty() : BaseProperty(0, "Hub")
 	{

@@ -8,10 +8,9 @@ class BaseProperty
 {
 public:
 	virtual String Serialize() = 0;
-	virtual bool ChangeProperty(const char* propertName, const char* jsonData) = 0;
+	virtual bool ChangeProperty(const char* propertName, const char* jsonData, PropertyChangedBy propertyChangedBy) = 0;
 
 	void FillBaseJson(JsonObject* doc);
-	bool SendPuzzlePropertyChanged(uint16_t propertyId, String propertyName, String value);
 
 	BaseProperty(uint16_t propertyId, String name)
 	{

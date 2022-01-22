@@ -13,7 +13,7 @@ public:
 
 	String Serialize();
 	void FillJson(JsonObject* obj);
-	bool ChangeProperty(const char* propertyName, const char* jsonData);
+	bool ChangeProperty(const char* propertyName, const char* jsonData, PropertyChangedBy propertyChangedBy);
 
 	PuzzleProperty(String name) : BaseProperty(0, name)
 	{

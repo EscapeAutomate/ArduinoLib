@@ -18,7 +18,7 @@ public:
 
 	String Serialize();
 	void FillJson(JsonObject* doc);
-	bool ChangeProperty(const char* propertyName, const char* jsonData);
+	bool ChangeProperty(const char* propertyName, const char* jsonData, PropertyChangedBy propertyChangedBy);
 
 	void AddValue(String string);
 

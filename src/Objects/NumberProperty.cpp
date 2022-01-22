@@ -24,7 +24,7 @@ void NumberProperty::FillJson(JsonObject* doc)
     (*doc)["value"] = Value;
 }
 
-bool NumberProperty::ChangeProperty(const char* propertyName, const char* jsonData)
+bool NumberProperty::ChangeProperty(const char* propertyName, const char* jsonData, PropertyChangedBy propertyChangedBy)
 {
     if (strcmp(propertyName, "Value") == 0)
     {
@@ -39,7 +39,7 @@ bool NumberProperty::ChangeProperty(const char* propertyName, const char* jsonDa
         }
 
         this->Value = doc.as<float_t>();
-        return EscapeAutomate.SendPuzzlePropertyChanged(ParentPuzzleId, PropertyId, propertyName, jsonData);
+        return EscapeAutomate.SendPuzzlePropertyChanged(ParentPuzzleId, PropertyId, propertyName, jsonData, propertyChangedBy);
     }
     else
     {
@@ -49,7 +49,7 @@ bool NumberProperty::ChangeProperty(const char* propertyName, const char* jsonDa
     return false;
 }
 
-bool NumberProperty::ChangeProperty(float_t value)
+bool NumberProperty::ChangeProperty(float_t value, PropertyChangedBy propertyChangedBy)
 {
     StaticJsonDocument<20> doc;
     this->Value = value;
@@ -60,5 +60,5 @@ bool NumberProperty::ChangeProperty(float_t value)
 
     serializeJson(doc, json);
 
-    return EscapeAutomate.SendPuzzlePropertyChanged(ParentPuzzleId, PropertyId, "value", json);
+    return EscapeAutomate.SendPuzzlePropertyChanged(ParentPuzzleId, PropertyId, "value", json, propertyChangedBy);
 }

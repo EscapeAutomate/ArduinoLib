@@ -11,7 +11,7 @@ void Puzzle::RegisterProperty(BaseProperty* prop)
 void Puzzle::UpdatePuzzleStatus(PuzzleStatus status)
 {
 	PuzzleObject->Status = status;
-	EscapeAutomate.SendPuzzlePropertyChanged(PuzzleObject->PuzzleId, 0, "Status", String(status));
+	EscapeAutomate.SendPuzzlePropertyChanged(PuzzleObject->PuzzleId, 0, "Status", String(status), PropertyChangedBy_Master);
 }
 
 void Puzzle::InnerLoop(void* puzzle)

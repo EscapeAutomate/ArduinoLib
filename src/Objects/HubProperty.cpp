@@ -22,7 +22,7 @@ void HubProperty::FillJson(JsonObject* obj)
     (*obj)["mac"] = Mac;
 }
 
-bool HubProperty::ChangeProperty(const char* propertyName, const char* jsonData)
+bool HubProperty::ChangeProperty(const char* propertyName, const char* jsonData, PropertyChangedBy propertyChangedBy)
 {
     return false;
 }
