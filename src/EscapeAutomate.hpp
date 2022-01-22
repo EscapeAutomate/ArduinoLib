@@ -45,7 +45,6 @@ private:
 
 public:
 	std::map<uint16_t, Puzzle*> CustomPuzzles;
-	uint8_t NumberOfPuzzle = 0;
 	HubProperty Hub;
 
 	void Setup(const char* projectId, const char* hubName, const char* ssid, const char* wifiPassword, const char* masterPassword);

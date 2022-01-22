@@ -111,7 +111,7 @@ void EscapeAutomateClass::ChangeProp(uint16_t puzzleId, uint16_t propertyId, con
 {
 	if (puzzleId == 65535) // all puzzles
 	{
-		for (auto const& puzzle : EscapeAutomate.CustomPuzzles)
+		for (auto const& puzzle : CustomPuzzles)
 		{
 			for (auto const& prop : puzzle.second->Properties)
 			{
@@ -123,9 +123,9 @@ void EscapeAutomateClass::ChangeProp(uint16_t puzzleId, uint16_t propertyId, con
 			}
 		}
 	}
-	else if (EscapeAutomate.CustomPuzzles.count(puzzleId) == 1)
+	else if (CustomPuzzles.count(puzzleId) == 1)
 	{
-		for (auto const& prop : EscapeAutomate.CustomPuzzles[puzzleId]->Properties)
+		for (auto const& prop : CustomPuzzles[puzzleId]->Properties)
 		{
 			if (prop.second->PropertyId == propertyId)
 			{
@@ -187,60 +187,61 @@ void EscapeAutomateClass::Setup(const char* projectId, const char* hubName, cons
 
 	wsClient.addHeader("Authorization", basic.append(b64Auth).c_str());
 
-	pixels.setBrightness(10);
-	pixels.begin();
-
 	UpdateStatusLed(StatusLedColors_NotConnected, false);
 
 	ArduinoOTA.setHostname(Hub.Name.c_str());
 	ArduinoOTA.setPassword(this->masterPassword);
 	ArduinoOTA
 		.onStart([]() {
-			String type;
-			if (ArduinoOTA.getCommand() == U_FLASH)
-				type = "sketch";
-			else // U_SPIFFS
-				type = "filesystem";
+		String type;
+		if (ArduinoOTA.getCommand() == U_FLASH)
+			type = "sketch";
+		else // U_SPIFFS
+			type = "filesystem";
 
-			// NOTE: if updating SPIFFS this would be the place to unmount SPIFFS using SPIFFS.end()
-			Serial.println("Start updating " + type);
-		})
+		// NOTE: if updating SPIFFS this would be the place to unmount SPIFFS using SPIFFS.end()
+		Serial.println("Start updating " + type);
+			})
 		.onEnd([]() {
-			Serial.println("\nEnd");
-		})
+				Serial.println("\nEnd");
+			})
 		.onProgress([](unsigned int progress, unsigned int total) {
-			Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
-		})
+		Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
+			})
 		.onError([](ota_error_t error) {
-			Serial.printf("Error[%u]: ", error);
-			if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
-			else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
-			else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
-			else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
-			else if (error == OTA_END_ERROR) Serial.println("End Failed");
-		});
+				Serial.printf("Error[%u]: ", error);
+				if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
+				else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
+				else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
+				else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
+				else if (error == OTA_END_ERROR) Serial.println("End Failed");
+			});
 
-	for (uint8_t i = 0; i < NumberOfPuzzle; i++)
-	{
-		CustomPuzzles[i]->Setup();
+		for (auto const& puzzle : CustomPuzzles)
+		{
+			puzzle.second->Setup();
 
-		xTaskCreate(
-			CustomPuzzles[i]->InnerLoop,    // Function that should be called
-			CustomPuzzles[i]->PuzzleObject->Name.c_str(),   // Name of the task (for debugging)
-			1000,            // Stack size (bytes)
-			CustomPuzzles[i],            // Parameter to pass
-			1,               // Task priority
-			NULL             // Task handle
-		);
-	}
+			xTaskCreate(
+				puzzle.second->InnerLoop,    // Function that should be called
+				puzzle.second->PuzzleObject->Name.c_str(),   // Name of the task (for debugging)
+				1000,            // Stack size (bytes)
+				puzzle.second,            // Parameter to pass
+				1,               // Task priority
+				NULL             // Task handle
+			);
+		}
 }
 
 void EscapeAutomateClass::RegisterPuzzle(Puzzle* puzzle)
 {
-	if (NumberOfPuzzle < 4)
+	if (CustomPuzzles.size() < 3)
 	{
-		CustomPuzzles[NumberOfPuzzle] = puzzle;
-		NumberOfPuzzle++;
+		CustomPuzzles.insert(std::pair<uint16_t, Puzzle*>(puzzle->PuzzleObject->PuzzleId, puzzle));
+	}
+	else
+	{
+		ESC_LOGERROR("Too many puzzle registered (max 4)!");
+		UpdateStatusLed(StatusLedColors_NotConnected, true);
 	}
 }
 
@@ -361,15 +362,15 @@ void EscapeAutomateClass::UpdateEngineStatus(HubConnectionStatus status)
 
 	SendHubPropertyChanged(0, "Status", String(Hub.Status));
 
-	for (int i = 0; i < NumberOfPuzzle; i++)
+	for (auto const& puzzle : CustomPuzzles)
 	{
 		if (status == HubConnectionStatus_Connected)
 		{
-			CustomPuzzles[i]->UpdatePuzzleStatus(PuzzleStatus_Connected);
+			puzzle.second->UpdatePuzzleStatus(PuzzleStatus_Connected);
 		}
 		else
 		{
-			CustomPuzzles[i]->UpdatePuzzleStatus(PuzzleStatus_Disconnected);
+			puzzle.second->UpdatePuzzleStatus(PuzzleStatus_Disconnected);
 		}
 	}
 }
@@ -397,7 +398,7 @@ bool EscapeAutomateClass::SendHubPropertyChanged(uint16_t propertyId, String pro
 
 bool EscapeAutomateClass::SendPuzzlePropertyChanged(uint16_t puzzleId, uint16_t propertyId, String propertyName, String value, PropertyChangedBy propertyChangedBy)
 {
-	EscapeAutomate.CustomPuzzles[puzzleId]->PropertyChanged(propertyId, propertyChangedBy);
+	CustomPuzzles[puzzleId]->PropertyChanged(propertyId, propertyChangedBy);
 	DynamicJsonDocument doc(1024);
 	String output;
 
@@ -433,17 +434,17 @@ bool EscapeAutomateClass::CallRegisterHub()
 
 	JsonArray puzzles = doc.createNestedArray("puzzles");
 
-	for (int i = 0; i < NumberOfPuzzle; i++)
+	for (auto const& puz : CustomPuzzles)
 	{
 		JsonObject puzzle = puzzles.createNestedObject();
 
 		JsonObject puzzleObj = puzzle.createNestedObject("puzzleObj");
-		CustomPuzzles[i]->PuzzleObject->FillJson(&puzzleObj);
+		puz.second->PuzzleObject->FillJson(&puzzleObj);
 
 		JsonArray puzzle_exposedProperties = puzzle.createNestedArray("exposedProperties");
 
 		//custom property
-		for (std::pair<const uint16_t, BaseProperty*> prop : CustomPuzzles[i]->Properties)
+		for (std::pair<const uint16_t, BaseProperty*> prop : puz.second->Properties)
 		{
 			puzzle_exposedProperties.add(prop.second->Serialize());
 		}
@@ -595,13 +596,18 @@ bool EscapeAutomateClass::SendMessage(MessageId mId, String message)
 
 void EscapeAutomateClass::UpdateStatusLed(StatusLedColors status, bool isError)
 {
+	pixels.setBrightness(10);
+	pixels.begin();
+
 	if (isError)
 	{
 		while (true)
 		{
 			pixels.setPixelColor(0, pixels.Color(255, 0, 0));
+			pixels.show();
 			delay(500);
 			pixels.setPixelColor(0, pixels.Color(0, 0, 0));
+			pixels.show();
 			delay(500);
 		}
 	}
@@ -626,29 +632,29 @@ void EscapeAutomateClass::UpdateStatusLed(StatusLedColors status, bool isError)
 
 void EscapeAutomateClass::Notification(uint16_t senderPuzzleId, uint16_t puzzleId, const char* jsonValue)
 {
-	if (EscapeAutomate.CustomPuzzles.count(puzzleId) == 1)
+	if (CustomPuzzles.count(puzzleId) == 1)
 	{
-		EscapeAutomate.CustomPuzzles[puzzleId]->Notification(senderPuzzleId, jsonValue);
+		CustomPuzzles[puzzleId]->Notification(senderPuzzleId, jsonValue);
 	}
 }
 
 void EscapeAutomateClass::ManagePuzzleStatusChange(uint16_t puzzleId, PuzzleStatus puzzleStatus)
 {
-	if (EscapeAutomate.CustomPuzzles.count(puzzleId) == 1)
+	if (CustomPuzzles.count(puzzleId) == 1)
 	{
 		switch (puzzleStatus)
 		{
 		case PuzzleStatus_Started:
-			EscapeAutomate.CustomPuzzles[puzzleId]->Start();
+			CustomPuzzles[puzzleId]->Start();
 			break;
 		case PuzzleStatus_Stopped:
-			EscapeAutomate.CustomPuzzles[puzzleId]->Stop();
+			CustomPuzzles[puzzleId]->Stop();
 			break;
 		case PuzzleStatus_Reseted:
-			EscapeAutomate.CustomPuzzles[puzzleId]->Reset();
+			CustomPuzzles[puzzleId]->Reset();
 			break;
 		case PuzzleStatus_Completed:
-			EscapeAutomate.CustomPuzzles[puzzleId]->Completed();
+			CustomPuzzles[puzzleId]->Completed();
 			break;
 		}
 	}
