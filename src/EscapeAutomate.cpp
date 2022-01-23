@@ -224,7 +224,7 @@ void EscapeAutomateClass::Setup(const char* projectId, const char* hubName, cons
 			xTaskCreate(
 				puzzle.second->InnerLoop,    // Function that should be called
 				puzzle.second->PuzzleObject->Name.c_str(),   // Name of the task (for debugging)
-				1000,            // Stack size (bytes)
+				8000,            // Stack size (bytes)
 				puzzle.second,            // Parameter to pass
 				1,               // Task priority
 				NULL             // Task handle
