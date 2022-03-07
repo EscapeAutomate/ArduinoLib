@@ -16,7 +16,7 @@ void onEventsCallback(WebsocketsEvent event, String data);
 EscapeAutomateClass EscapeAutomate;
 WebsocketsClient wsClient;
 
-Adafruit_NeoPixel pixels(1, 18, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel EscapeAutomatePixels(1, 18, NEO_GRB + NEO_KHZ800);
 
 void onMessageCallback(WebsocketsMessage message)
 {
@@ -596,18 +596,18 @@ bool EscapeAutomateClass::SendMessage(MessageId mId, String message)
 
 void EscapeAutomateClass::UpdateStatusLed(StatusLedColors status, bool isError)
 {
-	pixels.setBrightness(10);
-	pixels.begin();
+	EscapeAutomatePixels.setBrightness(10);
+	EscapeAutomatePixels.begin();
 
 	if (isError)
 	{
 		while (true)
 		{
-			pixels.setPixelColor(0, pixels.Color(255, 0, 0));
-			pixels.show();
+			EscapeAutomatePixels.setPixelColor(0, EscapeAutomatePixels.Color(255, 0, 0));
+			EscapeAutomatePixels.show();
 			delay(500);
-			pixels.setPixelColor(0, pixels.Color(0, 0, 0));
-			pixels.show();
+			EscapeAutomatePixels.setPixelColor(0, EscapeAutomatePixels.Color(0, 0, 0));
+			EscapeAutomatePixels.show();
 			delay(500);
 		}
 	}
@@ -615,19 +615,19 @@ void EscapeAutomateClass::UpdateStatusLed(StatusLedColors status, bool isError)
 	switch (status)
 	{
 	case StatusLedColors_NotConnected:
-		pixels.setPixelColor(0, pixels.Color(255, 0, 0));
+		EscapeAutomatePixels.setPixelColor(0, EscapeAutomatePixels.Color(255, 0, 0));
 		break;
 	case StatusLedColors_ConnectedToWifi:
-		pixels.setPixelColor(0, pixels.Color(0, 0, 255));
+		EscapeAutomatePixels.setPixelColor(0, EscapeAutomatePixels.Color(0, 0, 255));
 		break;
 	case StatusLedColors_ConnectedToMaster:
-		pixels.setPixelColor(0, pixels.Color(0, 255, 0));
+		EscapeAutomatePixels.setPixelColor(0, EscapeAutomatePixels.Color(0, 255, 0));
 		break;
 	default:
 		break;
 	}
 
-	pixels.show();
+	EscapeAutomatePixels.show();
 }
 
 void EscapeAutomateClass::Notification(uint16_t senderPuzzleId, uint16_t puzzleId, const char* jsonValue)
