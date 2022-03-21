@@ -161,7 +161,10 @@ void EscapeAutomateClass::Setup(const char* projectId, const char* hubName, cons
 	this->wifiPassword = wifiPassword;
 	this->masterPassword = masterPassword;
 
-	EscapeAutomatePixels = new Adafruit_NeoPixel(1, 18, NEO_GRB + NEO_KHZ800);
+	if (useNeopixel)
+	{
+		EscapeAutomatePixels = new Adafruit_NeoPixel(1, 18, NEO_GRB + NEO_KHZ800);
+	}
 
 	uint64_t chipid = ESP.getEfuseMac();
 	char macAddress[13];
