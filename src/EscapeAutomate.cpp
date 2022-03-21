@@ -20,8 +20,6 @@ WebsocketsClient wsClient;
 
 void onMessageCallback(WebsocketsMessage message)
 {
-	ESC_LOGINFO1("recv message:", message.data());
-
 	DynamicJsonDocument doc(4096);
 
 	DeserializationError error = deserializeJson(doc, message.data());
@@ -59,6 +57,7 @@ void onMessageCallback(WebsocketsMessage message)
 				const char* name = elem["name"]; // "test", "test3"
 				const char* jsonValue = elem["jsonValue"]; // "test2", "test4"
 
+				ESC_LOGINFO4("PuzzleChangeProperty", puzzleId, propertyId, name, jsonValue);
 				EscapeAutomate.ChangeProp(puzzleId, propertyId, name, jsonValue);
 			}
 		}
@@ -70,6 +69,7 @@ void onMessageCallback(WebsocketsMessage message)
 		const char* jsonValue2 = doc2["jsonValue"]; // 10
 
 		EscapeAutomate.Notification(senderPuzzleId2, puzzleId, jsonValue2);
+		ESC_LOGINFO3("Notification", senderPuzzleId2, puzzleId, jsonValue2);
 
 		break;
 	}
@@ -111,28 +111,45 @@ void EscapeAutomateClass::ChangeProp(uint16_t puzzleId, uint16_t propertyId, con
 {
 	if (puzzleId == 65535) // all puzzles
 	{
+		ESC_LOGINFO("ChangeProp ALL");
 		for (auto const& puzzle : CustomPuzzles)
 		{
-			for (auto const& prop : puzzle.second->Properties)
+			// Update of PuzzleProperty
+			if (propertyId == 0)
 			{
-				if (prop.second->PropertyId == propertyId)
-				{
-					prop.second->ChangeProperty(propertyName, jsonData, PropertyChangedBy_Master);
-					break;
-				}
+				puzzle.second->PuzzleObject->ChangeProperty(propertyName, jsonData, PropertyChangedBy_Master);
+			}
+			else if (puzzle.second->Properties.count(propertyId) == 1)
+			{
+				ESC_LOGINFO3("ChangeProp ALL", propertyId, propertyName, jsonData);
+				puzzle.second->Properties[propertyId]->ChangeProperty(propertyName, jsonData, PropertyChangedBy_Master);
+			}
+			else
+			{
+				ESC_LOGERROR1("ChangeProp ALL => property not found", propertyId);
 			}
 		}
 	}
 	else if (CustomPuzzles.count(puzzleId) == 1)
 	{
-		for (auto const& prop : CustomPuzzles[puzzleId]->Properties)
+		// Update of PuzzleProperty
+		if (propertyId == 0)
 		{
-			if (prop.second->PropertyId == propertyId)
-			{
-				prop.second->ChangeProperty(propertyName, jsonData, PropertyChangedBy_Master);
-				break;
-			}
+			CustomPuzzles[puzzleId]->PuzzleObject->ChangeProperty(propertyName, jsonData, PropertyChangedBy_Master);
 		}
+		else if (CustomPuzzles[puzzleId]->Properties.count(propertyId) == 1)
+		{
+			ESC_LOGINFO3("ChangeProp ALL", propertyId, propertyName, jsonData);
+			CustomPuzzles[puzzleId]->Properties[propertyId]->ChangeProperty(propertyName, jsonData, PropertyChangedBy_Master);
+		}
+		else
+		{
+			ESC_LOGERROR1("ChangeProp => property not found", propertyId);
+		}
+	}
+	else
+	{
+		ESC_LOGERROR1("ChangeProp => puzzle not found", puzzleId);
 	}
 }
 
@@ -150,7 +167,7 @@ bool EscapeAutomateClass::SendNotificationToPuzzle(uint16_t senderPuzzleId, uint
 	return SendMessage(MessageId_Notification, output);
 }
 
-void EscapeAutomateClass::Setup(const char* projectId, const char* hubName, const char* wifiSsid, const char* wifiPassword, const char* masterPassword, const char* server_mdns_address = "escapeautomatemaster2", bool useNeopixel = true)
+void EscapeAutomateClass::Setup(const char* projectId, const char* hubName, const char* wifiSsid, const char* wifiPassword, const char* masterPassword, const char* server_mdns_address, bool useNeopixel)
 {
 	this->mdnsAddress = server_mdns_address;
 	this->useNeopixel = useNeopixel;
@@ -407,6 +424,7 @@ bool EscapeAutomateClass::SendHubPropertyChanged(uint16_t propertyId, String pro
 
 bool EscapeAutomateClass::SendPuzzlePropertyChanged(uint16_t puzzleId, uint16_t propertyId, String propertyName, String value, PropertyChangedBy propertyChangedBy)
 {
+	ESC_LOGINFO4("SendPuzzlePropertyChanged", puzzleId, propertyId, propertyName, value);
 	CustomPuzzles[puzzleId]->PropertyChanged(propertyId, propertyChangedBy);
 	DynamicJsonDocument doc(1024);
 	String output;

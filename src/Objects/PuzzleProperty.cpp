@@ -28,6 +28,7 @@ bool PuzzleProperty::ChangeProperty(const char* propertyName, const char* jsonDa
 {
     if (strcmp(propertyName, "Status") == 0)
     {
+        ESC_LOGINFO("PuzzleProperty => Status");
         StaticJsonDocument<20> doc;
 
         DeserializationError error = deserializeJson(doc, jsonData);
@@ -45,6 +46,7 @@ bool PuzzleProperty::ChangeProperty(const char* propertyName, const char* jsonDa
     }
     else if (strcmp(propertyName,"Difficulty") == 0)
     {
+        ESC_LOGINFO("PuzzleProperty => Difficulty");
         StaticJsonDocument<256> doc;
 
         DeserializationError error = deserializeJson(doc, jsonData);

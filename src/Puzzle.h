@@ -20,6 +20,7 @@ public:
 		PuzzleObject = new PuzzleProperty(name);
 		PuzzleObject->DifficultyValue = difficulty;
 		PuzzleObject->PuzzleId = puzzleId;
+		PuzzleObject->ParentPuzzleId = puzzleId;
 		PuzzleObject->Status = PuzzleStatus_Disconnected;
 	}
 

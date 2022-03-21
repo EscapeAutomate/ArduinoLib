@@ -13,6 +13,7 @@
 #define ESC_LOGINFO1(x,y)      if(_ES_LOGLEVEL_>2) { Serial.print("[ES INFO] "); Serial.print(x); Serial.print(" "); Serial.println(y); }
 #define ESC_LOGINFO2(x,y,z)    if(_ES_LOGLEVEL_>2) { Serial.print("[ES INFO] "); Serial.print(x); Serial.print(" "); Serial.print(y); Serial.print(" "); Serial.println(z); }
 #define ESC_LOGINFO3(x,y,z,w)  if(_ES_LOGLEVEL_>2) { Serial.print("[ES INFO] "); Serial.print(x); Serial.print(" "); Serial.print(y); Serial.print(" "); Serial.print(z); Serial.print(" "); Serial.println(w); }
+#define ESC_LOGINFO4(x,y,z,w,u)  if(_ES_LOGLEVEL_>2) { Serial.print("[ES INFO] "); Serial.print(x); Serial.print(" "); Serial.print(y); Serial.print(" "); Serial.print(z); Serial.print(" ");; Serial.print(w); Serial.print(" "); Serial.println(u); }
 								  									
 #define ESC_LOGDEBUG(x)		   if(_ES_LOGLEVEL_>3) { Serial.print("[ES DEBUG] "); Serial.println(x); }
 #define ESC_LOGDEBUG1(x,y)	   if(_ES_LOGLEVEL_>3) { Serial.print("[ES DEBUG] "); Serial.print(x); Serial.print(" "); Serial.println(y); }
