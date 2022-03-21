@@ -6,11 +6,9 @@
 #include <ArduinoOTA.h>
 #include "WiFi.h"
 #include "defines.h"
-
-#if _ES_USE_NEOPIXEL_
 #include <Adafruit_NeoPixel.h>
-Adafruit_NeoPixel EscapeAutomatePixels(1, 18, NEO_GRB + NEO_KHZ800);
-#endif // _ES_USE_NEOPIXEL_
+
+Adafruit_NeoPixel* EscapeAutomatePixels;
 
 using namespace websockets;
 
@@ -163,6 +161,8 @@ void EscapeAutomateClass::Setup(const char* projectId, const char* hubName, cons
 	this->wifiPassword = wifiPassword;
 	this->masterPassword = masterPassword;
 
+	EscapeAutomatePixels = new Adafruit_NeoPixel(1, 18, NEO_GRB + NEO_KHZ800);
+
 	uint64_t chipid = ESP.getEfuseMac();
 	char macAddress[13];
 	memset(macAddress, '\0', 13);
@@ -209,33 +209,33 @@ void EscapeAutomateClass::Setup(const char* projectId, const char* hubName, cons
 		.onEnd([]() {
 				Serial.println("\nEnd");
 			})
-		.onProgress([](unsigned int progress, unsigned int total) {
-		Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
-			})
-		.onError([](ota_error_t error) {
-				Serial.printf("Error[%u]: ", error);
-				if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
-				else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
-				else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
-				else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
-				else if (error == OTA_END_ERROR) Serial.println("End Failed");
-			});
+				.onProgress([](unsigned int progress, unsigned int total) {
+				Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
+					})
+				.onError([](ota_error_t error) {
+						Serial.printf("Error[%u]: ", error);
+						if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
+						else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
+						else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
+						else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
+						else if (error == OTA_END_ERROR) Serial.println("End Failed");
+					});
 
-	for (auto const& puzzle : CustomPuzzles)
-	{
-		puzzle.second->Setup();
+					for (auto const& puzzle : CustomPuzzles)
+					{
+						puzzle.second->Setup();
 
-		xTaskCreate(
-			puzzle.second->InnerLoop,    // Function that should be called
-			puzzle.second->PuzzleObject->Name.c_str(),   // Name of the task (for debugging)
-			8000,            // Stack size (bytes)
-			puzzle.second,            // Parameter to pass
-			1,               // Task priority
-			NULL             // Task handle
-		);
-	}
+						xTaskCreate(
+							puzzle.second->InnerLoop,    // Function that should be called
+							puzzle.second->PuzzleObject->Name.c_str(),   // Name of the task (for debugging)
+							8000,            // Stack size (bytes)
+							puzzle.second,            // Parameter to pass
+							1,               // Task priority
+							NULL             // Task handle
+						);
+					}
 
-	ESC_LOGINFO("setup done");
+					ESC_LOGINFO("setup done");
 }
 
 void EscapeAutomateClass::RegisterPuzzle(Puzzle* puzzle)
@@ -602,40 +602,41 @@ bool EscapeAutomateClass::SendMessage(MessageId mId, String message)
 
 void EscapeAutomateClass::UpdateStatusLed(StatusLedColors status, bool isError)
 {
-#if _ES_USE_NEOPIXEL_
-	EscapeAutomatePixels.setBrightness(10);
-	EscapeAutomatePixels.begin();
-
-	if (isError)
+	if (useNeopixel)
 	{
-		while (true)
+		EscapeAutomatePixels->setBrightness(10);
+		EscapeAutomatePixels->begin();
+
+		if (isError)
 		{
-			EscapeAutomatePixels.setPixelColor(0, EscapeAutomatePixels.Color(255, 0, 0));
-			EscapeAutomatePixels.show();
-			delay(500);
-			EscapeAutomatePixels.setPixelColor(0, EscapeAutomatePixels.Color(0, 0, 0));
-			EscapeAutomatePixels.show();
-			delay(500);
+			while (true)
+			{
+				EscapeAutomatePixels->setPixelColor(0, EscapeAutomatePixels->Color(255, 0, 0));
+				EscapeAutomatePixels->show();
+				delay(500);
+				EscapeAutomatePixels->setPixelColor(0, EscapeAutomatePixels->Color(0, 0, 0));
+				EscapeAutomatePixels->show();
+				delay(500);
+			}
 		}
-	}
 
-	switch (status)
-	{
-	case StatusLedColors_NotConnected:
-		EscapeAutomatePixels.setPixelColor(0, EscapeAutomatePixels.Color(255, 0, 0));
-		break;
-	case StatusLedColors_ConnectedToWifi:
-		EscapeAutomatePixels.setPixelColor(0, EscapeAutomatePixels.Color(0, 0, 255));
-		break;
-	case StatusLedColors_ConnectedToMaster:
-		EscapeAutomatePixels.setPixelColor(0, EscapeAutomatePixels.Color(0, 255, 0));
-		break;
-	default:
-		break;
-	}
+		switch (status)
+		{
+		case StatusLedColors_NotConnected:
+			EscapeAutomatePixels->setPixelColor(0, EscapeAutomatePixels->Color(255, 0, 0));
+			break;
+		case StatusLedColors_ConnectedToWifi:
+			EscapeAutomatePixels->setPixelColor(0, EscapeAutomatePixels->Color(0, 0, 255));
+			break;
+		case StatusLedColors_ConnectedToMaster:
+			EscapeAutomatePixels->setPixelColor(0, EscapeAutomatePixels->Color(0, 255, 0));
+			break;
+		default:
+			break;
+		}
 
-	EscapeAutomatePixels.show();
-#endif
+		EscapeAutomatePixels->show();
+	}
 }
 
 void EscapeAutomateClass::Notification(uint16_t senderPuzzleId, uint16_t puzzleId, const char* jsonValue)
