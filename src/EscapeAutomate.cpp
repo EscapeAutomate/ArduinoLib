@@ -152,8 +152,10 @@ bool EscapeAutomateClass::SendNotificationToPuzzle(uint16_t senderPuzzleId, uint
 	return SendMessage(MessageId_Notification, output);
 }
 
-void EscapeAutomateClass::Setup(const char* projectId, const char* hubName, const char* wifiSsid, const char* wifiPassword, const char* masterPassword)
+void EscapeAutomateClass::Setup(const char* projectId, const char* hubName, const char* wifiSsid, const char* wifiPassword, const char* masterPassword, const char* server_mdns_address = "escapeautomatemaster2", bool useNeopixel = true)
 {
+	this->mdnsAddress = server_mdns_address;
+	this->useNeopixel = useNeopixel;
 	Hub.ProjectId = projectId;
 	Hub.Name = hubName;
 
@@ -284,7 +286,7 @@ void EscapeAutomateClass::Loop()
 	{
 		if (Hub.Status == HubConnectionStatus_NotConnected)
 		{
-			int n = MDNS.queryService(_ES_SERVER_MDNS_, "tcp");
+			int n = MDNS.queryService(mdnsAddress, "tcp");
 
 			if (n == 0)
 			{
