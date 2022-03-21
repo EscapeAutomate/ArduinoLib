@@ -19,6 +19,14 @@
 #define _ES_LOGLEVEL_       _ES_LOG_INFO
 #endif
 
+#ifndef _ES_SERVER_MDNS_
+#define _ES_SERVER_MDNS_       "escapeautomatemaster2"
+#endif
+
+#ifndef _ES_USE_NEOPIXEL_
+#define _ES_USE_NEOPIXEL_       true
+#endif
+
 #include "EscLogs.h"
 #include "Puzzle.h"
 #include "Objects/HubProperty.h"

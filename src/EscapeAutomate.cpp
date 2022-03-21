@@ -3,10 +3,14 @@
 #include <WebSocket/tiny_websockets/internals/wscrypto/crypto.hpp>
 #include <ESPmDNS.h>
 #include <ArduinoJson.h>
-#include <Adafruit_NeoPixel.h>
 #include <ArduinoOTA.h>
 #include "WiFi.h"
 #include "defines.h"
+
+#if _ES_USE_NEOPIXEL_
+#include <Adafruit_NeoPixel.h>
+Adafruit_NeoPixel EscapeAutomatePixels(1, 18, NEO_GRB + NEO_KHZ800);
+#endif // _ES_USE_NEOPIXEL_
 
 using namespace websockets;
 
@@ -15,8 +19,6 @@ void onEventsCallback(WebsocketsEvent event, String data);
 
 EscapeAutomateClass EscapeAutomate;
 WebsocketsClient wsClient;
-
-Adafruit_NeoPixel EscapeAutomatePixels(1, 18, NEO_GRB + NEO_KHZ800);
 
 void onMessageCallback(WebsocketsMessage message)
 {
@@ -217,19 +219,21 @@ void EscapeAutomateClass::Setup(const char* projectId, const char* hubName, cons
 				else if (error == OTA_END_ERROR) Serial.println("End Failed");
 			});
 
-		for (auto const& puzzle : CustomPuzzles)
-		{
-			puzzle.second->Setup();
+	for (auto const& puzzle : CustomPuzzles)
+	{
+		puzzle.second->Setup();
 
-			xTaskCreate(
-				puzzle.second->InnerLoop,    // Function that should be called
-				puzzle.second->PuzzleObject->Name.c_str(),   // Name of the task (for debugging)
-				8000,            // Stack size (bytes)
-				puzzle.second,            // Parameter to pass
-				1,               // Task priority
-				NULL             // Task handle
-			);
-		}
+		xTaskCreate(
+			puzzle.second->InnerLoop,    // Function that should be called
+			puzzle.second->PuzzleObject->Name.c_str(),   // Name of the task (for debugging)
+			8000,            // Stack size (bytes)
+			puzzle.second,            // Parameter to pass
+			1,               // Task priority
+			NULL             // Task handle
+		);
+	}
+
+	ESC_LOGINFO("setup done");
 }
 
 void EscapeAutomateClass::RegisterPuzzle(Puzzle* puzzle)
@@ -280,7 +284,7 @@ void EscapeAutomateClass::Loop()
 	{
 		if (Hub.Status == HubConnectionStatus_NotConnected)
 		{
-			int n = MDNS.queryService("escapeautomatemaster2", "tcp");
+			int n = MDNS.queryService(_ES_SERVER_MDNS_, "tcp");
 
 			if (n == 0)
 			{
@@ -596,6 +600,7 @@ bool EscapeAutomateClass::SendMessage(MessageId mId, String message)
 
 void EscapeAutomateClass::UpdateStatusLed(StatusLedColors status, bool isError)
 {
+#if _ES_USE_NEOPIXEL_
 	EscapeAutomatePixels.setBrightness(10);
 	EscapeAutomatePixels.begin();
 
@@ -628,6 +633,7 @@ void EscapeAutomateClass::UpdateStatusLed(StatusLedColors status, bool isError)
 	}
 
 	EscapeAutomatePixels.show();
+#endif
 }
 
 void EscapeAutomateClass::Notification(uint16_t senderPuzzleId, uint16_t puzzleId, const char* jsonValue)
