@@ -668,11 +668,11 @@ void EscapeAutomateClass::Notification(uint16_t senderPuzzleId, uint16_t puzzleI
 	}
 }
 
-void EscapeAutomateClass::ManagePuzzleStatusChange(uint16_t puzzleId, PuzzleStatus puzzleStatus)
+void EscapeAutomateClass::ManagePuzzleStatusChange(uint16_t puzzleId)
 {
 	if (CustomPuzzles.count(puzzleId) == 1)
 	{
-		switch (puzzleStatus)
+		switch (CustomPuzzles[puzzleId]->PuzzleObject->Status)
 		{
 		case PuzzleStatus_Started:
 			CustomPuzzles[puzzleId]->Start();

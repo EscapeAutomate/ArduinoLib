@@ -55,7 +55,7 @@ public:
 	void UpdateEngineStatus(HubConnectionStatus status);
 	bool SendHubPropertyChanged(uint16_t propertyId, String propertyName, String value);
 	bool SendPuzzlePropertyChanged(uint16_t puzzleId, uint16_t propertyId, String propertyName, String value, PropertyChangedBy propertyChangedBy);
-	void ManagePuzzleStatusChange(uint16_t puzzleId, PuzzleStatus puzzleStatus);
+	void ManagePuzzleStatusChange(uint16_t puzzleId);
 	void ChangeProp(uint16_t PuzzleId, uint16_t PropertyId, const char* propertyName, const char* jsonData);
 	bool SendNotificationToPuzzle(uint16_t senderPuzzleId, uint16_t destPuzzleId, const char* Notification);
 	void Notification(uint16_t senderPuzzleId, uint16_t puzzleId, const char* jsonValue);

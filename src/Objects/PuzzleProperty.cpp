@@ -41,7 +41,9 @@ bool PuzzleProperty::ChangeProperty(const char* propertyName, const char* jsonDa
 
         PuzzleStatus status = (PuzzleStatus)doc.as<uint16_t>();
 
-        EscapeAutomate.ManagePuzzleStatusChange(ParentPuzzleId, status);
+        this->Status = status;
+
+        EscapeAutomate.ManagePuzzleStatusChange(ParentPuzzleId);
         return EscapeAutomate.SendPuzzlePropertyChanged(ParentPuzzleId, PropertyId, propertyName, jsonData, propertyChangedBy);
     }
     else if (strcmp(propertyName,"Difficulty") == 0)
