@@ -46,14 +46,6 @@ public:
 
 	void Loop()
 	{
-	}
-
-	void Notification(uint16_t senderId, const char* jsonValue)
-	{
-	}
-
-	void Completed()
-	{
 		switch (PuzzleObject->Status)
 		{
 		case PuzzleStatus_Stopped:
@@ -68,12 +60,46 @@ public:
 		}
 	}
 
+	void Notification(uint16_t senderId, const char* jsonValue)
+	{
+		DynamicJsonDocument jsonDoc(800);
+
+		DeserializationError error = deserializeJson(jsonDoc, jsonValue);
+
+		if (error) {
+			Serial.print("deserializeJson() failed: ");
+			Serial.println(error.c_str());
+			return;
+		}
+
+		if (senderId == 12)
+		{
+			bool MyObject_prop1 = jsonDoc["MyObject"]["prop1"];
+		}
+	}
+
+	void Completed()
+	{
+		UpdatePuzzleStatus(PuzzleStatus_Completed);
+	}
+
 	void PropertyChanged(uint16_t propertyId, PropertyChangedBy changedBy)
 	{
 		switch (propertyId)
 		{
 		case 1: // testBool
+		{
+			DynamicJsonDocument jsonDoc(800);
+			JsonObject hub = jsonDoc.createNestedObject("MyObject");
+
+			hub["prop1"] = true;
+
+			String output;
+			serializeJson(jsonDoc, output);
+
+			EscapeAutomate.SendNotificationToPuzzle(this->PuzzleObject->PuzzleId, 12, output.c_str());
 			break;
+		}
 		case 2: // testNumber
 			break;
 		case 3: // testString
@@ -91,7 +117,6 @@ void setup() {
 	delay(500);
 
 	EscapeAutomate.RegisterPuzzle(&ExamplePuzzle);
-
 	EscapeAutomate.Setup("projectId", "Basic example", "wifiSsid", "wifiPassword", "masterPassword");
 }
 

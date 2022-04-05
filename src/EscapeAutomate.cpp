@@ -79,26 +79,26 @@ void onEventsCallback(WebsocketsEvent event, String data)
 {
 	if (event == WebsocketsEvent::ConnectionOpened)
 	{
-		ESC_LOGINFO("Connnection Opened");
+		ESC_LOGDEBUG("Connnection Opened");
 	}
 	else if (event == WebsocketsEvent::ConnectionClosed)
 	{
-		ESC_LOGINFO("Wifi not connected...");
+		ESC_LOGDEBUG("Wifi not connected...");
 	}
 	else if (event == WebsocketsEvent::GotPing)
 	{
-		ESC_LOGINFO("Got a Ping!");
+		ESC_LOGDEBUG("Got a Ping!");
 	}
 	else if (event == WebsocketsEvent::GotPong)
 	{
-		ESC_LOGINFO("Got a Pong!");
+		ESC_LOGDEBUG("Got a Pong!");
 	}
 }
 
 bool IsSuccessCode(int httpResponseCode)
 {
 	if (httpResponseCode >= 200 && httpResponseCode < 300) {
-		ESC_LOGINFO1("HTTP Ok code:", httpResponseCode);
+		ESC_LOGDEBUG1("HTTP Ok code:", httpResponseCode);
 		return true;
 	}
 	else {

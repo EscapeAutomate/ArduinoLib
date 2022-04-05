@@ -16,7 +16,7 @@
 #define _ES_LOG_DEBUG		4
 
 #ifndef _ES_LOGLEVEL_
-#define _ES_LOGLEVEL_       _ES_LOG_INFO
+#define _ES_LOGLEVEL_       _ES_LOG_WARN
 #endif
 
 #include "EscLogs.h"
